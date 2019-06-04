@@ -33,7 +33,7 @@ class UserController extends ApiController
             'email' => 'required|email|unique:users',
             'password' => 'required|min:6|confirmed'
         ];
-        
+
         $this->validate($request, $rules);
 
         $data = $request->all();
@@ -78,7 +78,7 @@ class UserController extends ApiController
         if($request->has('name')){
             $user->name = $request->name;
         }
-        
+
         if($request->has('email') && $user->email !== $request->email){
             $user->verified = User::UNVERIFIED_USER;
             $user->verification_token = User::generateVerificationCode();
@@ -91,13 +91,13 @@ class UserController extends ApiController
 
         if($request->has('admin')){
             if(!$user->isVerified()){
-                return response()->json(['error' => 'Only verified user may change admin field', 'code' => 409], 409);
+                return $this->errorResponse('Only verified user may change admin field', 409);
             }
             $user->admin = $request->admin;
         }
 
         if(!$user->isDirty()){
-            return response()->json(['error' => 'Your need to specify values to update', 'code' => 422], 422);
+            return $this->errorResponse('Your need to specify values to update', 422);
         }
 
         $user->save();
