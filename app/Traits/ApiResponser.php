@@ -1,11 +1,11 @@
-<?php 
+<?php
 namespace App\Traits;
 
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 trait ApiResponser {
-    
+
     private function successResponse($data, $code){
         return response()->json($data, $code);
     }
@@ -22,6 +22,11 @@ trait ApiResponser {
     protected function showOne(Model $model, $code = 200)
     {
         return $this->successResponse(['data' => $model], $code);
+    }
+
+    protected function showMessage($message, $code = 200)
+    {
+        return $this->successResponse(['message' => $message], $code);
     }
 
 }
