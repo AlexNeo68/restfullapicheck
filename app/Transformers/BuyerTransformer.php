@@ -21,7 +21,33 @@ class BuyerTransformer extends TransformerAbstract
             'isVerified' => (int)$buyer->verified,
             'dateCreate' => (string)$buyer->created_at,
             'dateLastUpdated' => (string)$buyer->updated_at,
-            'dateDeleted' => isset($buyer->deleted_at) ? (string)$buyer->deleted_at : null
+            'dateDeleted' => isset($buyer->deleted_at) ? (string)$buyer->deleted_at : null,
+            'links' => [
+                [
+                    'rel' => 'self',
+                    'href' => route('buyers.show', $buyer->id)
+                ],
+                [
+                    'rel' => 'buyer.products',
+                    'href' => route('buyers.products.index', $buyer->id)
+                ],
+                [
+                    'rel' => 'buyer.sellers',
+                    'href' => route('buyers.sellers.index', $buyer->id)
+                ],
+                [
+                    'rel' => 'buyer.transactions',
+                    'href' => route('buyers.transactions.index', $buyer->id)
+                ],
+                [
+                    'rel' => 'buyer.categories',
+                    'href' => route('buyers.categories.index', $buyer->id)
+                ],
+                [
+                    'rel' => 'buyer.user',
+                    'href' => route('users.show', $buyer->id)
+                ]
+            ]
         ];
     }
 
