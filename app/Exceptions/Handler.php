@@ -13,6 +13,7 @@ use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Database\QueryException;
+use Illuminate\Session\TokenMismatchException;
 
 class Handler extends ExceptionHandler
 {
@@ -92,6 +93,10 @@ class Handler extends ExceptionHandler
             }
         }
 
+        if($exception instanceof TokenMismatchException){
+            return redirect()->back()->withInput($request->input());
+        }
+
         if(config('app.debug')){
             return parent::render($request, $exception);
         }
@@ -108,15 +113,27 @@ class Handler extends ExceptionHandler
      */
     protected function unauthenticated($request, AuthenticationException $exception)
     {
+        if($this->isFrontend($request)){
+            return redirect()->guest('login');
+        }
         return $this->errorResponse($exception->getMessage(), 401);
     }
 
     protected function convertValidationExceptionToResponse(ValidationException $exception, $request)
     {
-        return $this->errorResponse($exception->errors(), $exception->status);
+        $errors = $exception->errors();
+        $status = $exception->status;
+
+        if($this->isFrontend($request)){
+            return $request->ajax() ? response($errors, $status) : redirect()->back()->withInput($request->input())->withErrors($errors);
+        }
+        return $this->errorResponse($errors, $status);
     }
 
+    private function isFrontend($request)
+    {
+        return $request->acceptsHtml() && collect($request->route()->middleware())->contains('web');
+    }
 
-    
 
 }
