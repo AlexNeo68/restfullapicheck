@@ -9,6 +9,7 @@ use App\Http\Controllers\ApiController;
 
 class BuyerController extends ApiController
 {
+
     /**
      * Display a listing of the resource.
      *
@@ -19,7 +20,7 @@ class BuyerController extends ApiController
         $buyers = Buyer::has('transactions')->get();
         return $this->showAll($buyers);
     }
-    
+
 
     /**
      * Display the specified resource.

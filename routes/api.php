@@ -53,3 +53,4 @@ Route::resource('transactions', 'Transaction\TransactionController', ['only' => 
 Route::resource('transactions.categories', 'Transaction\TransactionCategoryController', ['only' => ['index'] ]);
 Route::resource('transactions.sellers', 'Transaction\TransactionSellerController', ['only' => ['index'] ]);
 
+Route::post('/oauth/token', '\Laravel\Passport\Http\Controllers\AccessTokenController@issueToken');
