@@ -8,6 +8,11 @@ use App\Transaction;
 
 class TransactionController extends ApiController
 {
+    public function __construct()
+    {
+        parent::__construct();
+        $this->middleware('scope:read-general')->only(['index', 'show']);
+    }
     /**
      * Display a listing of the resource.
      *
