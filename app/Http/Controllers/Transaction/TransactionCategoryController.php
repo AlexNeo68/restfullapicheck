@@ -10,7 +10,7 @@ class TransactionCategoryController extends ApiController
 {
     public function __construct()
     {
-        parent::__construct();
+        $this->middleware('client.credentials')->only(['index']);
     }
     /**
      * Display a listing of the resource.
@@ -19,6 +19,7 @@ class TransactionCategoryController extends ApiController
      */
     public function index(Transaction $transaction)
     {
+        $this->isAllowedAdmin();
         $categories = $transaction->product->categories;
         return $this->showAll($categories);
     }

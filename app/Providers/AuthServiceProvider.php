@@ -6,6 +6,16 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Laravel\Passport\Passport;
 use Illuminate\Support\Carbon;
+use App\Buyer;
+use App\User;
+use App\Seller;
+use App\Transaction;
+use App\Product;
+use App\Policies\BuyerPolicy;
+use App\Policies\UserPolicy;
+use App\Policies\SellerPolicy;
+use App\Policies\TransactionPolicy;
+use App\Policies\ProductPolicy;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -16,6 +26,11 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         // 'App\Model' => 'App\Policies\ModelPolicy',
+        Buyer::class => BuyerPolicy::class,
+        Seller::class => SellerPolicy::class,
+        User::class => UserPolicy::class,
+        Transaction::class => TransactionPolicy::class,
+        Product::class => ProductPolicy::class,
     ];
 
     /**
@@ -27,8 +42,12 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
+        Gate::define('admin-actions', function ($user){
+            return $user->isAdmin();
+        });
+
         Passport::routes();
-        Passport::tokensExpireIn(Carbon::now()->addSeconds(30));
+        Passport::tokensExpireIn(Carbon::now()->addMinutes(30));
         Passport::refreshTokensExpireIn(Carbon::now()->addDays(30));
         Passport::enableImplicitGrant();
         Passport::tokensCan([

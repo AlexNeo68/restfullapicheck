@@ -19,6 +19,7 @@ class UserTransformer extends TransformerAbstract
             'name' => (string)$user->name,
             'email' => (string)$user->email,
             'isVerified' => (int)$user->verified,
+            'verification_token' => (string)$user->verification_token,
             'isAdmin' => ($user->admin === 'true'),
             'dateCreate' => (string)$user->created_at,
             'dateLastUpdated' => (string)$user->updated_at,
@@ -41,6 +42,7 @@ class UserTransformer extends TransformerAbstract
             'isVerified' => 'verified',
             'isAdmin' => 'admin',
             'password' => 'password',
+            'password_confirmation' => 'password_confirmation',
             'dateCreate' => 'created_at',
             'dateLastUpdated' => 'updated_at',
             'dateDeleted' => 'deleted_at'
@@ -58,6 +60,7 @@ class UserTransformer extends TransformerAbstract
             'verified' => 'isVerified',
             'admin' => 'isAdmin',
             'password' => 'password',
+            'password_confirmation' => 'password_confirmation',
             'created_at' => 'dateCreate',
             'updated_at' => 'dateLastUpdated',
             'deleted_at' => 'dateDeleted'

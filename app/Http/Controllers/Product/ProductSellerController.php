@@ -19,6 +19,7 @@ class ProductSellerController extends ApiController
      */
     public function index(Product $product)
     {
+        $this->isAllowedAdmin();
         $seller = $product->seller;
         return $this->showOne($seller);
     }
